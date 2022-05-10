@@ -9,25 +9,50 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Lumen\Auth\Authorizable;
 
-class User extends Model implements AuthenticatableContract, AuthorizableContract
+class User extends Model implements
+    AuthenticatableContract,
+    AuthorizableContract
 {
     use Authenticatable, Authorizable, HasFactory;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var string[]
+     * @var array
      */
     protected $fillable = [
-        'name', 'email',
+        'name', 'phone', 'avatar'
     ];
 
     /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var string[]
+     * @inheritDoc
      */
-    protected $hidden = [
-        'password',
-    ];
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
+    public function email()
+    {
+        return $this->hasOne(UserEmail::class)->where('primary', 1)
+            ->where('active', 1);
+    }
+
+    public function emails()
+    {
+        return $this->hasMany(UserEmail::class);
+    }
+
+    public function password()
+    {
+        return $this->hasOne(UserPassword::class)->where('active', 1);
+    }
 }
