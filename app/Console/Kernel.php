@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\MakeModelCommand::class,
+        Commands\RouteCommand::class,
     ];
 
     /**
