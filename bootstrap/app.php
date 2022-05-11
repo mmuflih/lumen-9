@@ -61,6 +61,9 @@ $app->singleton(
 
 $app->configure('app');
 
+$app->configure('jwt');
+
+
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -76,9 +79,13 @@ $app->configure('app');
 //     App\Http\Middleware\ExampleMiddleware::class
 // ]);
 
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+$app->routeMiddleware([
+    'auth' => App\Http\Middleware\Authenticate::class,
+]);
+
+
+$app->register(App\Providers\AuthServiceProvider::class);
+$app->register(PHPOpenSourceSaver\JWTAuth\Providers\LumenServiceProvider::class);
 
 $app->middleware([
     App\Http\Middleware\CorsMiddleware::class,
