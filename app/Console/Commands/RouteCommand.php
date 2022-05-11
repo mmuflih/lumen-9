@@ -4,10 +4,10 @@
  * Created by Muhammad Muflih Kholidin
  * https://github.com/mmuflih
  * muflic.24@gmail.com
- * at: 24/07/20 06.45
  **/
 
 namespace App\Console\Commands;
+
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
 use Symfony\Component\Console\Input\InputOption;
@@ -131,8 +131,8 @@ class RouteCommand extends Command
     {
         return (isset($action['middleware']))
             ? (is_array($action['middleware']))
-                ? join(", ", $action['middleware'])
-                : $action['middleware'] : '';
+            ? join(", ", $action['middleware'])
+            : $action['middleware'] : '';
     }
 
     /**

@@ -4,7 +4,6 @@
  * Created by Muhammad Muflih Kholidin
  * https://github.com/mmuflih
  * muflic.24@gmail.com
- * at: 20/06/20 21.02
  **/
 
 namespace App\Console\Commands;
@@ -42,7 +41,7 @@ class MakeModelCommand extends GeneratorCommand
      */
     public function handle()
     {
-        if (parent::handle() === false && ! $this->option('force')) {
+        if (parent::handle() === false && !$this->option('force')) {
             return;
         }
         if ($this->option('all')) {
@@ -109,9 +108,9 @@ class MakeModelCommand extends GeneratorCommand
     protected function getStub()
     {
         if ($this->option('pivot')) {
-            return __DIR__.'/stubs/pivot.model.stub';
+            return __DIR__ . '/stubs/pivot.model.stub';
         }
-        return __DIR__.'/stubs/model.stub';
+        return __DIR__ . '/stubs/model.stub';
     }
     /**
      * Get the default namespace for the class.
