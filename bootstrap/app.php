@@ -86,6 +86,7 @@ $app->routeMiddleware([
 
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(PHPOpenSourceSaver\JWTAuth\Providers\LumenServiceProvider::class);
+$app->register(Laravel\Socialite\SocialiteServiceProvider::class);
 
 $app->middleware([
     App\Http\Middleware\CorsMiddleware::class,

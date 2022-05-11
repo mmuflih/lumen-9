@@ -10,9 +10,11 @@ namespace App\Http\Controllers;
 
 use App\Context\AuthController\LoginHandler;
 use App\Context\AuthController\GetMeReader;
+use App\Context\AuthController\LoginSocialHandler;
 use App\Context\AuthController\LogoutHandler;
 use App\Context\AuthController\RefreshReader;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class AuthController extends ApiController
 {
@@ -23,7 +25,7 @@ class AuthController extends ApiController
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:api', ['except' => ['login', 'social']]);
     }
 
     /**
@@ -43,6 +45,24 @@ class AuthController extends ApiController
         } catch (\Exception $e) {
             return $this->responseException($e);
         }
+    }
+
+    public function social(Request $request)
+    {
+        $rules = [
+            'social_token' => 'required',
+            'social_type' => [
+                'required',
+                Rule::in(['google', 'facebook']),
+            ]
+        ];
+
+        $this->validate($request, $rules);
+        return $this->responseHandler(
+            new LoginSocialHandler($request),
+            $request,
+            $rules
+        );
     }
 
     /**

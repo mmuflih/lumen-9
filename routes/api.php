@@ -21,6 +21,7 @@ $router->get('/ping', function () use ($router) {
 $router->group(['prefix' => '/api/v1'], function () use ($router) {
     $router->group(['prefix' => '/auth'], function () use ($router) {
         $router->post('/login', 'AuthController@login');
+        $router->post('/social', 'AuthController@social');
         $router->post('/logout', 'AuthController@logout');
         $router->put('/refresh', 'AuthController@refresh');
         $router->post('/register', 'UserController@register');
