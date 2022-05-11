@@ -17,4 +17,8 @@ class UserEmail extends Model
     protected $fillable = [
         'email', 'domain', 'raw_input', 'primary', 'active'
     ];
+
+    protected $hidden = [
+        'domain', 'raw_input', 'primary', 'active', 'user_id', 'created_at', 'updated_at'
+    ];
 }

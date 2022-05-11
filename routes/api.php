@@ -35,3 +35,12 @@ $router->group(['prefix' => '/api/v1', 'middleware' => 'auth'], function () use 
         $router->put('/set-password', 'UserController@setPassword');
     });
 });
+
+/** admin */
+$router->group(['prefix' => '/admin/v1', 'middleware' => 'auth'], function () use ($router) {
+    $router->group(['prefix' => '/user'], function () use ($router) {
+        $router->post('/', 'UserController@addUserByAdmin');
+        $router->get('/', 'UserController@listUserByAdmin');
+        $router->get('/{user_id}', 'UserController@getUserByAdmin');
+    });
+});
