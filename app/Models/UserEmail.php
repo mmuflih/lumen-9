@@ -21,4 +21,9 @@ class UserEmail extends Model
     protected $hidden = [
         'domain', 'raw_input', 'primary', 'active', 'user_id', 'created_at', 'updated_at'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

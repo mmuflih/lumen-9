@@ -60,7 +60,7 @@ $app->singleton(
 */
 
 $app->configure('app');
-
+$app->configure('mail');
 $app->configure('jwt');
 
 
@@ -87,6 +87,7 @@ $app->routeMiddleware([
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(PHPOpenSourceSaver\JWTAuth\Providers\LumenServiceProvider::class);
 $app->register(Laravel\Socialite\SocialiteServiceProvider::class);
+$app->register(Illuminate\Mail\MailServiceProvider::class);
 
 $app->middleware([
     App\Http\Middleware\CorsMiddleware::class,
