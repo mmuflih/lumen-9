@@ -26,6 +26,13 @@ $router->group(['prefix' => '/api/v1'], function () use ($router) {
         $router->put('/refresh', 'AuthController@refresh');
         $router->post('/register', 'UserController@register');
     });
+
+    $router->group(['prefix' => '/otp'], function () use ($router) {
+        $router->group(['prefix' => '/email'], function () use ($router) {
+            $router->post('/resend', 'OtpController@request');
+            $router->post('/verify', 'OtpController@verify');
+        });
+    });
 });
 
 /** protected route */

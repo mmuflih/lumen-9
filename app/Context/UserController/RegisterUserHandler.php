@@ -9,9 +9,12 @@
 namespace App\Context\UserController;
 
 use App\Context\Handler;
+use App\Jobs\SendEmailJob;
+use App\Models\Otp;
 use App\Models\User;
 use App\Models\UserEmail;
 use App\Models\UserPassword;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -47,7 +50,8 @@ class RegisterUserHandler implements Handler
         DB::transaction(function () use ($user) {
             $user->save();
             $this->setPassword($user, $this->password);
-            $this->setEmail($user, $this->email, $this->domain);
+            $userEmail = $this->setEmail($user, $this->email, $this->domain);
+            $this->sendOTP($user, $userEmail);
         });
         return $user;
     }
@@ -57,7 +61,7 @@ class RegisterUserHandler implements Handler
         $userPass = new UserPassword();
         $userPass->user_id = $user->id;
         $userPass->setPassword($password);
-        $userPass->active = true;
+        $userPass->active = false;
         $userPass->save();
     }
 
@@ -69,7 +73,41 @@ class RegisterUserHandler implements Handler
         $userEmail->domain = $domain;
         $userEmail->raw_input = null;
         $userEmail->primary = true;
-        $userEmail->active = true;
+        $userEmail->active = false;
         $userEmail->save();
+        return $userEmail;
+    }
+
+    private function sendOTP($user, $userEmail)
+    {
+        if (is_null($userEmail)) {
+            return;
+        }
+        $otpCode = $this->generateOTP($user->id);
+        $mailJob = new SendEmailJob(
+            "mail.register.otp",
+            "Hi " . $user->name . " - OTP",
+            $userEmail->email,
+            $user->name,
+            [
+                'name' => $user->name,
+                'title' => 'One Time Password',
+                'code' => $otpCode,
+            ]
+        );
+        app('Illuminate\Contracts\Bus\Dispatcher')->dispatch($mailJob);
+    }
+
+    private function generateOTP($userId)
+    {
+        $code = rand(100000, 999999);
+        $otp = new Otp();
+        $otp->fill([
+            'user_id' => $userId,
+            'code' => $code,
+            'expired_at' => Carbon::now(env('APP_TIMEZONE'))->addMinutes(5)
+        ]);
+        $otp->save();
+        return $code;
     }
 }
