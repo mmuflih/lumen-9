@@ -34,6 +34,11 @@ $router->group(['prefix' => '/api/v1'], function () use ($router) {
             $router->post('/resend', 'OtpController@request');
             $router->put('/verify', 'OtpController@verify');
         });
+
+        $router->group(['prefix' => '/wa', 'middleware' => 'auth'], function () use ($router) {
+            $router->post('/request', 'OtpController@requestPhone');
+            $router->post('/verify', 'OtpController@verifyPhone');
+        });
     });
 });
 

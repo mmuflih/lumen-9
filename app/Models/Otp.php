@@ -15,6 +15,6 @@ class Otp extends Model
     protected $table = "otps";
 
     protected $fillable = [
-        'user_id', 'code', 'expired_at', 'attempts'
+        'user_id', 'to', 'code', 'expired_at', 'attempts'
     ];
 }

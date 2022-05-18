@@ -29,7 +29,10 @@ class VerifyOTPHandler implements Handler
     public function handle()
     {
         $now = Carbon::now(env("APP_TIMEZONE"));
-        $otp = Otp::where('code', $this->valid['code'])
+        $otp = Otp::where([
+            'to' => $this->valid['email'],
+            'code' => $this->valid['code']
+        ])
             ->first();
         if (is_null($otp)) {
             throw new \Exception("OTP Data not Found", 422);
