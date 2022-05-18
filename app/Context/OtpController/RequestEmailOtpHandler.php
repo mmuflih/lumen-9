@@ -2,7 +2,6 @@
 
 /**
  * Created by Muhammad Muflih Kholidin
- * at 2021-01-18 13:55:31
  * https://github.com/mmuflih
  * muflic.24@gmail.com
  **/
@@ -10,12 +9,8 @@
 namespace App\Context\OtpController;
 
 use App\Context\Handler;
-use App\Jobs\SendEmailJob;
-use App\Models\Otp;
 use App\Models\User;
 use App\Models\UserEmail;
-use App\Models\UserPassword;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class RequestEmailOtpHandler implements Handler

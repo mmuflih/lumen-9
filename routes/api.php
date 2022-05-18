@@ -25,6 +25,8 @@ $router->group(['prefix' => '/api/v1'], function () use ($router) {
         $router->post('/logout', 'AuthController@logout');
         $router->put('/refresh', 'AuthController@refresh');
         $router->post('/register', 'UserController@register');
+        $router->post('/request-reset-password', 'UserController@requestResetPassword');
+        $router->put('/reset-password', 'UserController@resetPassword');
     });
 
     $router->group(['prefix' => '/otp'], function () use ($router) {

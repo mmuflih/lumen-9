@@ -12,6 +12,8 @@ use App\Context\UserController\AddByAdmin;
 use App\Context\UserController\GetByAdmin;
 use App\Context\UserController\ListByAdmin;
 use App\Context\UserController\RegisterUserHandler;
+use App\Context\UserController\RequestResetPasswordHandler;
+use App\Context\UserController\ResetPasswordHandler;
 use App\Context\UserController\SetPasswordHandler;
 use Illuminate\Http\Request;
 use Validator;
@@ -51,6 +53,24 @@ class UserController extends ApiController
         } catch (\Exception $e) {
             return $this->responseException($e);
         }
+    }
+
+    public function requestResetPassword(Request $request)
+    {
+        $rules = [
+            'email' => 'required',
+            'reset_page' => 'required'
+        ];
+        return $this->responseHandler(new RequestResetPasswordHandler($request), $request, $rules);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $rules = [
+            'reset_token' => 'required',
+            'password' => 'required|confirmed',
+        ];
+        return $this->responseHandler(new ResetPasswordHandler($request), $request, $rules);
     }
 
     /** ---------- admin area -------------- */
