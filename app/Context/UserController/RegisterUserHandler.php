@@ -9,6 +9,7 @@
 namespace App\Context\UserController;
 
 use App\Context\Handler;
+use App\Context\OtpController\CreateOtp;
 use App\Jobs\SendEmailJob;
 use App\Models\Otp;
 use App\Models\User;
@@ -51,7 +52,7 @@ class RegisterUserHandler implements Handler
             $user->save();
             $this->setPassword($user, $this->password);
             $userEmail = $this->setEmail($user, $this->email, $this->domain);
-            $this->sendOTP($user, $userEmail);
+            CreateOtp::SendOTP($user, $userEmail);
         });
         return $user;
     }
@@ -76,38 +77,5 @@ class RegisterUserHandler implements Handler
         $userEmail->active = false;
         $userEmail->save();
         return $userEmail;
-    }
-
-    private function sendOTP($user, $userEmail)
-    {
-        if (is_null($userEmail)) {
-            return;
-        }
-        $otpCode = $this->generateOTP($user->id);
-        $mailJob = new SendEmailJob(
-            "mail.register.otp",
-            "Hi " . $user->name . " - OTP",
-            $userEmail->email,
-            $user->name,
-            [
-                'name' => $user->name,
-                'title' => 'One Time Password',
-                'code' => $otpCode,
-            ]
-        );
-        app('Illuminate\Contracts\Bus\Dispatcher')->dispatch($mailJob);
-    }
-
-    private function generateOTP($userId)
-    {
-        $code = rand(100000, 999999);
-        $otp = new Otp();
-        $otp->fill([
-            'user_id' => $userId,
-            'code' => $code,
-            'expired_at' => Carbon::now(env('APP_TIMEZONE'))->addMinutes(5)
-        ]);
-        $otp->save();
-        return $code;
     }
 }
