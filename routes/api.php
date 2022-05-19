@@ -32,7 +32,7 @@ $router->group(['prefix' => '/api/v1'], function () use ($router) {
     $router->group(['prefix' => '/otp'], function () use ($router) {
         $router->group(['prefix' => '/email'], function () use ($router) {
             $router->post('/resend', 'OtpController@request');
-            $router->post('/verify', 'OtpController@verify');
+            $router->put('/verify', 'OtpController@verify');
         });
     });
 });
