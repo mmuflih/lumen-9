@@ -51,7 +51,7 @@ $router->group(['prefix' => '/api/v1', 'middleware' => 'auth'], function () use 
 });
 
 /** admin */
-$router->group(['prefix' => '/admin/v1', 'middleware' => 'auth'], function () use ($router) {
+$router->group(['prefix' => '/admin/v1', 'middleware' => 'auth:admin'], function () use ($router) {
     $router->group(['prefix' => '/user'], function () use ($router) {
         $router->post('/', 'UserController@addUserByAdmin');
         $router->get('/', 'UserController@listUserByAdmin');
