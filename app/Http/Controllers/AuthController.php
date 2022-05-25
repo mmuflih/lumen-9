@@ -25,7 +25,7 @@ class AuthController extends ApiController
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'social']]);
+        // $this->middleware('auth:api', ['except' => ['login', 'social']]);
     }
 
     /**

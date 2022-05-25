@@ -8,7 +8,7 @@
 
 return [
     'defaults' => [
-        'guard' => 'api',
+        'guard' => 'user',
         'passwords' => 'users',
     ],
 
@@ -19,7 +19,19 @@ return [
             'provider' => 'users',
         ],
 
-        'api' => [
+        'sa' => [
+            'driver' => 'jwt',
+            'provider' => 'users',
+        ],
+        'admin' => [
+            'driver' => 'jwt',
+            'provider' => 'users',
+        ],
+        'merchant' => [
+            'driver' => 'jwt',
+            'provider' => 'users',
+        ],
+        'user' => [
             'driver' => 'jwt',
             'provider' => 'users',
         ],

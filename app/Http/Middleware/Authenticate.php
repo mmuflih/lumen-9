@@ -2,8 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Contracts\Auth\Factory as Auth;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class Authenticate
 {
@@ -37,6 +39,17 @@ class Authenticate
     {
         if ($this->auth->guard($guard)->guest()) {
             return response('Unauthorized.', 401);
+        }
+
+        if ($guard) {
+            $payload = JWTAuth::parseToken()->getPayload();
+            $guards = User::$GUARDS[$guard];
+            foreach ($guards as $g) {
+                if ($g == $payload['role']) {
+                    return $next($request);
+                }
+            }
+            return response('Access token not permitted', 401);
         }
 
         return $next($request);

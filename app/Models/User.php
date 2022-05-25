@@ -17,6 +17,18 @@ class User extends Model implements
 {
     use Authenticatable, Authorizable, HasFactory;
 
+    public static $ROLE_SA = 'sa';
+    public static $ROLE_ADMIN = 'admin';
+    public static $ROLE_MERCHANT = 'merchant';
+    public static $ROLE_USER = 'user';
+
+    public static $GUARDS = [
+        'sa' => ['sa'],
+        'admin' => ['sa', 'admin'],
+        'merchant' => ['sa', 'admin', 'merchant'],
+        'user' => ['sa', 'admin', 'merchant', 'user'],
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -39,7 +51,9 @@ class User extends Model implements
      */
     public function getJWTCustomClaims()
     {
-        return [];
+        return [
+            'role' => $this->role,
+        ];
     }
 
     public function email()
