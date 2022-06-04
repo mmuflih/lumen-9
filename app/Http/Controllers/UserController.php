@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 use App\Context\UserController\AddByAdmin;
+use App\Context\UserController\AdminSetPassword;
 use App\Context\UserController\GetByAdmin;
 use App\Context\UserController\ListByAdmin;
 use App\Context\UserController\RegisterUserHandler;
@@ -92,5 +93,20 @@ class UserController extends ApiController
     public function listUserByAdmin(Request $request)
     {
         return $this->responseHasPaginateReader(new ListByAdmin($request));
+    }
+
+    public function adminSetPassword(Request $request)
+    {
+        try {
+            $this->validate($request, [
+                'user_id' => 'required|exists:users,id',
+                'password' => 'required|confirmed',
+            ]);
+            $handler = new AdminSetPassword($request);
+            $data = $handler->handle();
+            return $this->responseData($data);
+        } catch (\Exception $e) {
+            return $this->responseException($e);
+        }
     }
 }

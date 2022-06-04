@@ -56,5 +56,6 @@ $router->group(['prefix' => '/admin/v1', 'middleware' => 'auth:admin'], function
         $router->post('/', 'UserController@addUserByAdmin');
         $router->get('/', 'UserController@listUserByAdmin');
         $router->get('/{user_id}', 'UserController@getUserByAdmin');
+        $router->put('/set-password', 'UserController@adminSetPassword');
     });
 });
