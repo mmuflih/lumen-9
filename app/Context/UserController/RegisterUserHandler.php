@@ -10,12 +10,9 @@ namespace App\Context\UserController;
 
 use App\Context\Handler;
 use App\Context\OtpController\CreateOtp;
-use App\Jobs\SendEmailJob;
-use App\Models\Otp;
 use App\Models\User;
 use App\Models\UserEmail;
 use App\Models\UserPassword;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -25,13 +22,15 @@ class RegisterUserHandler implements Handler
     private $name;
     private $password;
     private $domain;
+    private $phone;
 
-    public function __construct($email, $name, $password, $domain)
+    public function __construct($email, $name, $password, $phone, $domain)
     {
         $this->email = $email;
         $this->name = $name;
         $this->password = $password;
         $this->domain = $domain;
+        $this->phone = $phone;
     }
 
     public static function fromRequest(Request $request)
@@ -40,6 +39,7 @@ class RegisterUserHandler implements Handler
             $request->get('email'),
             $request->get('name'),
             $request->get('password'),
+            $request->get('phone'),
             $request->get('domain')
         );
     }
@@ -48,6 +48,7 @@ class RegisterUserHandler implements Handler
     {
         $user = new User();
         $user->name = $this->name;
+        $user->phone = $this->phone;
         DB::transaction(function () use ($user) {
             $user->save();
             $this->setPassword($user, $this->password);

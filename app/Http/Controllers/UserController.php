@@ -30,6 +30,7 @@ class UserController extends ApiController
         try {
             $this->validate($request, [
                 'email' => 'required|email|unique:user_emails',
+                'phone' => 'sometimes|required|unique:users,phone',
                 'password' => 'required|confirmed',
                 'name' => 'required',
             ]);
