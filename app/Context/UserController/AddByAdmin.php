@@ -25,6 +25,7 @@ class AddByAdmin implements Handler
             $request->get('email'),
             $request->get('name'),
             $request->get('password'),
+            $request->get('phone'),
             $request->get('domain')
         );
     }
