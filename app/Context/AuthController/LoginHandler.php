@@ -41,9 +41,10 @@ class LoginHandler implements Handler
             throw new \Exception("Email and password not match", 422);
         }
 
-        $user = User::find($password->user_id);
+        $user = User::where('id', $password->user_id)->whereNull('deleted_at')
+            ->first();
         if (is_null($user)) {
-            throw new \Exception("Email and password not match", 422);
+            throw new \Exception("User dana not found", 422);
         }
         $token = auth()->login($user);
 
