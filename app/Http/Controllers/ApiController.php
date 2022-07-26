@@ -82,16 +82,19 @@ class ApiController extends BaseController
 
     public function responsePagedList(PagedList $data, $code = 200)
     {
+        $currPage = $data->getCurrentPage();
+        $totalPages = (int)ceil($data->getTotalRow() / $data->getItemsPerPage());
         $struct = [
             'data' => $data->getData(),
             'message' => 'success',
             'code' => $code,
             "paginate" => [
-                "total" => $data->getTotalRow(),
+                "current_page" => $currPage,
+                "next_page" => $currPage == $totalPages ? null : $currPage + 1,
                 "per_page" => $data->getItemsPerPage(),
-                "size" => $data->getItemsPerPage(),
-                "page" => $data->getCurrentPage(),
-                "page_count" => (int)ceil($data->getTotalRow() / $data->getItemsPerPage())
+                "prev_page" => $currPage == 1 ? null : $currPage + 1,
+                "total_entries" => $data->getTotalRow(),
+                "total_pages" => $totalPages
             ]
         ];
         return new JsonResponse($struct, $code);
@@ -99,16 +102,20 @@ class ApiController extends BaseController
 
     public function responsePaginate(LengthAwarePaginator $data, $code = 200)
     {
+        $currPage = $data->currentPage();
+        $total = $data->total();
+        $totalPages = (int)ceil($total / $data->perPage());
         $struct = [
             'data' => $data->items(),
             'message' => 'success',
             'code' => $code,
             "paginate" => [
-                "total" => $data->total(),
-                "size" => (int)$data->perPage(),
-                "per_page" => (int)$data->perPage(),
-                "page" => $data->currentPage(),
-                "page_count" => (int)ceil($data->total() / (int)$data->perPage())
+                "current_page" => $currPage,
+                "next_page" => $currPage == $totalPages ? null : $currPage + 1,
+                "per_page" => $data->perPage(),
+                "prev_page" => $currPage == 1 ? null : $currPage + 1,
+                "total_entries" => $total,
+                "total_pages" => $totalPages
             ]
         ];
         return new JsonResponse($struct, $code);
