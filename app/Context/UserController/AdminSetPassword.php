@@ -29,6 +29,11 @@ class AdminSetPassword implements Handler
 
         $password = $user->password;
 
+        /** check old password */
+        if (!app('hash')->check($this->request->get('old_password'), $password->password)) {
+            throw new \Exception("Password lama tidak cocok", 422);
+        }
+
         /** update old password data */
         UserPassword::where('user_id', $user->id)
             ->update(['active' => false]);

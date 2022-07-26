@@ -101,6 +101,7 @@ class UserController extends ApiController
         try {
             $this->validate($request, [
                 'user_id' => 'required|exists:users,id',
+                'old_password' => 'required',
                 'password' => 'required|confirmed',
             ]);
             $handler = new AdminSetPassword($request);
