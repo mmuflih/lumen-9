@@ -31,7 +31,7 @@ class UserController extends ApiController
             $this->validate($request, [
                 'email' => 'required|email|unique:user_emails',
                 'phone' => 'sometimes|required|unique:users,phone',
-                'password' => 'required|confirmed',
+                'password' => 'required|min:8|confirmed',
                 'name' => 'required',
             ]);
             $handler = RegisterUserHandler::fromRequest($request);
@@ -47,7 +47,7 @@ class UserController extends ApiController
         try {
             $this->validate($request, [
                 'old_password' => 'required',
-                'password' => 'sometimes|required|confirmed',
+                'password' => 'sometimes|required|min:8|confirmed',
             ]);
             $handler = new SetPasswordHandler($request);
             $data = $handler->handle();
@@ -70,7 +70,7 @@ class UserController extends ApiController
     {
         $rules = [
             'reset_token' => 'required',
-            'password' => 'required|confirmed',
+            'password' => 'required|min:8|confirmed',
         ];
         return $this->responseHandler(new ResetPasswordHandler($request), $request, $rules);
     }
@@ -80,7 +80,7 @@ class UserController extends ApiController
     {
         $rules = [
             'email' => 'required|email|unique:user_emails',
-            'password' => 'required|confirmed',
+            'password' => 'required|min:8|confirmed',
             'name' => 'required',
         ];
         return $this->responseHandler(new AddByAdmin($request), $request, $rules);
@@ -102,7 +102,7 @@ class UserController extends ApiController
             $this->validate($request, [
                 'user_id' => 'required|exists:users,id',
                 'old_password' => 'required',
-                'password' => 'required|confirmed',
+                'password' => 'required|min:8|confirmed',
             ]);
             $handler = new AdminSetPassword($request);
             $data = $handler->handle();
