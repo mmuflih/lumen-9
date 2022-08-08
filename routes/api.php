@@ -2,6 +2,8 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -15,6 +17,16 @@
 
 $router->get('/ping', function () use ($router) {
     return response()->json(['pong' => 'OK']);
+});
+
+$router->get('/email', function (Request $req) use ($router) {
+    $data = [
+        'name' => 'Muflih',
+        'title' => 'Account Verification',
+        'url' => env('VERIFICATION_BASE_URL') . "?token=asenuthansoehu"
+    ];
+    $valid = $req->all();
+    return view("mail.$valid[template]", $data);
 });
 
 /** public route */
